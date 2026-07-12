@@ -12,6 +12,7 @@ def seed_mkremote(apps, schema_editor):
             # (nessun dominio configurato). Aggiornare quando ci sarà un
             # dominio reale (vedi deploy/README.md).
             'url': 'https://94.177.161.127/',
+            'icon': 'mkremote.svg',
             'order': 0,
         },
     )
