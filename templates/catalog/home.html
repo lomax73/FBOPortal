@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Portale FBO{% endblock %}
+
+{% block extra_head %}
+<style>
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 1.25rem;
+    }
+    .app-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 2rem 1.25rem;
+        background: #fff;
+        border-radius: 14px;
+        box-shadow: 0 1px 2px rgba(18, 50, 71, 0.06);
+        text-decoration: none;
+        color: var(--ink);
+        text-align: center;
+        transition: box-shadow 0.15s ease, transform 0.15s ease;
+    }
+    .app-card:hover { box-shadow: 0 8px 24px rgba(18, 50, 71, 0.12); transform: translateY(-2px); }
+    .app-card .app-icon {
+        width: 56px; height: 56px; border-radius: 50%;
+        background: var(--azure-tint); color: var(--azure-dark);
+        display: flex; align-items: center; justify-content: center;
+        font-family: var(--font-display); font-weight: 700; font-size: 1.4rem;
+        overflow: hidden;
+    }
+    .app-card .app-icon img { width: 100%; height: 100%; object-fit: cover; }
+    .app-card .app-name { font-family: var(--font-display); font-weight: 600; color: var(--navy); }
+    .app-card .app-description { font-size: 0.85rem; color: #64748b; }
+    .empty-state { color: #64748b; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Le tue applicazioni</h1>
+{% if apps %}
+<div class="grid">
+    {% for app in apps %}
+    <a class="app-card" href="{{ app.url }}" target="_blank" rel="noopener">
+        <span class="app-icon">
+            {% if app.icon %}
+                <img src="{% static 'img/' %}{{ app.icon }}" alt="">
+            {% else %}
+                {{ app.name|slice:":1"|upper }}
+            {% endif %}
+        </span>
+        <span class="app-name">{{ app.name }}</span>
+        {% if app.description %}<span class="app-description">{{ app.description }}</span>{% endif %}
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<p class="empty-state">Nessuna applicazione configurata. Aggiungine una dall'<a href="{% url 'admin:index' %}">area admin</a>.</p>
+{% endif %}
+{% endblock %}

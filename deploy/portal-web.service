@@ -1,0 +1,17 @@
+[Unit]
+Description=Portale FBO - Gunicorn
+After=network.target
+
+[Service]
+Type=simple
+User=portal
+Group=portal
+WorkingDirectory=/opt/portal/app
+ExecStart=/opt/portal/app/venv/bin/gunicorn portal.wsgi:application \
+    --bind unix:/run/portal/gunicorn.sock \
+    --workers 2
+RuntimeDirectory=portal
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
