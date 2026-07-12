@@ -8,7 +8,10 @@ def seed_mkremote(apps, schema_editor):
         defaults={
             'name': 'MKRemote',
             'description': 'Gestione remota router e apparati clienti',
-            'url': 'https://mkremote.tuodominio.it/',
+            # Provvisorio: MKRemote è ancora servito sull'IP nudo del VPS
+            # (nessun dominio configurato). Aggiornare quando ci sarà un
+            # dominio reale (vedi deploy/README.md).
+            'url': 'https://94.177.161.127/',
             'order': 0,
         },
     )

@@ -4,6 +4,17 @@ Pattern identico a quello già in uso per MKRemote (repo separato, utente di
 sistema dedicato, venv proprio, sottodominio proprio). Riusare questa
 cartella come modello per ogni nuova app della famiglia FBO.
 
+## Stato attuale in produzione (provvisorio)
+
+**Non esiste ancora un dominio reale**: anche MKRemote è servito sull'IP nudo
+(`94.177.161.127`) con un certificato self-signed, non c'è DNS configurato.
+Il Portale è stato quindi deployato provvisoriamente sulla stessa IP, porta
+diversa: **`https://94.177.161.127:8443/`**, cert self-signed dedicato in
+`/etc/ssl/portal/`, config Nginx realmente in uso in
+`deploy/nginx-portal-ip-provisional.conf` (porta aperta anche su UFW).
+`deploy/nginx-portal.conf` resta il template "finale" a sottodominio, da
+usare appena sarà disponibile un dominio vero (vedi passi sotto).
+
 ## Provisioning iniziale (una tantum)
 
 ```
