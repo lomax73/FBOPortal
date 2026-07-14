@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Elimina utente — Portale FBO{% endblock %}
+
+{% block content %}
+<h1>Elimina utente</h1>
+<div class="card">
+    <p>Eliminare <strong>{{ username }}</strong> da <strong>{{ app_link.name }}</strong>? L'operazione è definitiva.</p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn" style="background:#ef4444;" type="submit">Elimina</button>
+        <a class="btn btn-secondary" href="{% url 'user-list' %}">Annulla</a>
+    </form>
+</div>
+{% endblock %}

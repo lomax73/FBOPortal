@@ -21,6 +21,12 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'true').lower() == 'true'
 
 ALLOWED_HOSTS = [h for h in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h]
 
+# Chiave master Fernet per la cifratura del token di gestione utenti
+# (AppLink.api_token). Stesso meccanismo di MKRemote per le credenziali
+# router. Generarla con:
+#   python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+MASTER_ENCRYPTION_KEY = os.environ.get('MASTER_ENCRYPTION_KEY')
+
 
 # Application definition
 
@@ -32,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'catalog',
+    'useradmin',
 ]
 
 MIDDLEWARE = [

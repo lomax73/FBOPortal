@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Utenti — Portale FBO{% endblock %}
+
+{% block content %}
+<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:1.5rem;">
+    <h1>Utenti</h1>
+    {% if has_managed_apps %}
+    <a class="btn" href="{% url 'user-create' %}">+ Nuovo utente</a>
+    {% endif %}
+</div>
+
+{% if not has_managed_apps %}
+<p style="color:#64748b;">
+    Nessuna app ha la gestione utenti configurata. Vai nell'
+    <a href="{% url 'admin:catalog_applink_changelist' %}">admin</a>, apri un'app e compila
+    "URL base API interna" e "API token" (vedi <code>deploy/README.md</code> di quell'app).
+</p>
+{% endif %}
+
+{% if errors %}
+<ul class="messages">
+    {% for e in errors %}
+    <li class="error">{{ e.app.name }} non raggiungibile: {{ e.error }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if rows %}
+<table>
+    <thead>
+        <tr><th>Username</th><th>App</th><th>Email</th><th>Attivo</th><th>Ultimo accesso</th><th></th></tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.user.username }}</td>
+            <td>{{ row.app.name }}</td>
+            <td>{{ row.user.email|default:"—" }}</td>
+            <td>
+                {% if row.user.is_active %}
+                    <span class="badge" style="background:#22c55e;">Sì</span>
+                {% else %}
+                    <span class="badge" style="background:#9ca3af;">No</span>
+                {% endif %}
+            </td>
+            <td>{{ row.user.last_login|default:"mai" }}</td>
+            <td style="white-space:nowrap;">
+                <a href="{% url 'user-update' row.app.pk row.user.id %}?username={{ row.user.username }}&email={{ row.user.email }}&is_active={{ row.user.is_active|yesno:'1,0' }}">Modifica</a>
+                ·
+                <a href="{% url 'user-delete' row.app.pk row.user.id %}?username={{ row.user.username }}">Elimina</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% elif has_managed_apps and not errors %}
+<p style="color:#64748b;">Nessun utente ancora in nessuna app.</p>
+{% endif %}
+{% endblock %}
