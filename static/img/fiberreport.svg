@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="Collaudi Fibra">
+  <rect x="8" y="8" width="84" height="84" rx="20" fill="#123247"/>
+  <polyline points="15,58 33,58 43,36 55,68 67,44 85,44" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="85" cy="44" r="5.5" fill="#27a5de"/>
+</svg>
