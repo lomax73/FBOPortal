@@ -17,3 +17,8 @@ media/
 # Elenchi clienti reali usati come riferimento/import: dati commerciali,
 # mai in git.
 lista clienti*.xlsx
+
+# File temporanei tra upload e conferma dell'import clienti (dati
+# commerciali dei clienti, mai in git; cancellati automaticamente dopo
+# la conferma).
+/clienti_import_tmp/

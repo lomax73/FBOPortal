@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Importa clienti — Portale FBO{% endblock %}
+
+{% block content %}
+<h1>Scegli i clienti da importare</h1>
+<p style="color:#64748b;">
+    Trovate {{ rows|length }} righe con Denominazione. Le righe già presenti in
+    anagrafica (stesso nome) sono deselezionate di default, ma puoi comunque
+    includerle se si tratta davvero di un cliente diverso.
+</p>
+
+<form method="post" action="{% url 'cliente-import-confirm' %}">
+    {% csrf_token %}
+    <input type="hidden" name="token" value="{{ token }}">
+
+    <div style="margin-bottom:0.75rem;">
+        <button type="button" class="btn btn-secondary" onclick="document.querySelectorAll('.riga-check').forEach(c => c.checked = true)">Seleziona tutti</button>
+        <button type="button" class="btn btn-secondary" onclick="document.querySelectorAll('.riga-check').forEach(c => c.checked = false)">Deseleziona tutti</button>
+    </div>
+
+    <div style="overflow-x:auto;">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Denominazione</th>
+                <th>Indirizzo</th>
+                <th>Comune</th>
+                <th>P.IVA</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i, row in rows %}
+            <tr>
+                <td>
+                    <input class="riga-check" type="checkbox" name="riga" value="{{ i }}" style="width:auto;" {% if not row.gia_presente %}checked{% endif %}>
+                </td>
+                <td>
+                    {{ row.ragione_sociale }}
+                    {% if row.gia_presente %}<br><span class="badge" style="background:#9ca3af;">già in anagrafica</span>{% endif %}
+                </td>
+                <td>{{ row.indirizzo }}{% if row.citta %}, {{ row.citta }}{% endif %}</td>
+                <td>{{ row.citta }} {{ row.provincia }}</td>
+                <td>{{ row.piva }}</td>
+                <td>{{ row.email }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    </div>
+
+    <div style="margin-top:1rem;">
+        <button class="btn" type="submit">Importa i selezionati</button>
+        <a class="btn btn-secondary" href="{% url 'cliente-list' %}">Annulla</a>
+    </div>
+</form>
+{% endblock %}

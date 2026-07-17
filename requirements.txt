@@ -3,3 +3,4 @@ python-dotenv
 gunicorn
 cryptography
 requests
+openpyxl

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Importa clienti — Portale FBO{% endblock %}
+
+{% block content %}
+<h1>Importa clienti da Excel</h1>
+<div class="card">
+    <p style="color:#64748b;">
+        Carica un export .xlsx con in prima riga le intestazioni (es. Denominazione,
+        Indirizzo, Comune, CAP, Provincia, P.IVA/TAX ID, ecc.). Nella schermata
+        successiva potrai scegliere quali righe importare davvero.
+    </p>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label for="file">File .xlsx</label>
+            <input type="file" name="file" id="file" accept=".xlsx" required>
+        </p>
+        <button class="btn" type="submit">Carica e continua</button>
+        <a class="btn btn-secondary" href="{% url 'cliente-list' %}">Annulla</a>
+    </form>
+</div>
+{% endblock %}
