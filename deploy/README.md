@@ -28,7 +28,7 @@ cd /opt/portal/app
 sudo -u portal python3 -m venv venv
 sudo -u portal venv/bin/pip install -r requirements.txt
 
-cp .env.example .env   # poi valorizzare DJANGO_SECRET_KEY, DJANGO_ALLOWED_HOSTS=portal.tuodominio.it
+cp .env.example .env   # poi valorizzare DJANGO_SECRET_KEY, DJANGO_ALLOWED_HOSTS=portal.tuodominio.it, INTERNAL_API_TOKEN
 sudo -u portal venv/bin/python manage.py migrate
 sudo -u portal venv/bin/python manage.py collectstatic --noinput
 sudo -u portal venv/bin/python manage.py createsuperuser
@@ -42,6 +42,20 @@ ln -s /etc/nginx/sites-available/portal /etc/nginx/sites-enabled/portal
 nginx -t && systemctl reload nginx
 # + certificato TLS (es. certbot --nginx -d portal.tuodominio.it)
 ```
+
+## API interna anagrafica clienti (per le app satellite)
+
+Da qui in poi il Portale **riceve** anche chiamate interne, non solo le fa
+(caso finora unico: gestione utenti multi-app). `clienti/api/internal/`
+espone in sola lettura l'anagrafica clienti condivisa (`GET .../clienti/`,
+`GET .../clienti/<uuid>/`), protetta da header
+`Authorization: Token <INTERNAL_API_TOKEN>` e da un blocco Nginx dedicato
+che consente solo `127.0.0.1` (già incluso in `nginx-portal-ip-
+provisional.conf`/`nginx-portal.conf`, prima del blocco generico
+`location /`). Ogni app satellite che deve risolvere un client_id (es.
+FBOPreventivi) configura nel proprio `.env`:
+- `PORTAL_INTERNAL_BASE_URL` (es. `https://127.0.0.1:8443`)
+- `PORTAL_API_TOKEN` (stesso valore di `INTERNAL_API_TOKEN` qui sopra)
 
 ## Deploy di un aggiornamento
 

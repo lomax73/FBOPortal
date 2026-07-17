@@ -27,6 +27,13 @@ ALLOWED_HOSTS = [h for h in os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,12
 #   python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 MASTER_ENCRYPTION_KEY = os.environ.get('MASTER_ENCRYPTION_KEY')
 
+# Token per la API interna di sola lettura dell'anagrafica clienti
+# (clienti/api/internal/), usata dalle app satellite (es. FBOPreventivi)
+# per risolvere un client_id in nome/indirizzo — raggiungibile solo da
+# localhost (regola Nginx), il token è una difesa aggiuntiva. Generare
+# con: python -c "import secrets; print(secrets.token_urlsafe(32))"
+INTERNAL_API_TOKEN = os.environ.get('INTERNAL_API_TOKEN', '')
+
 
 # Application definition
 
@@ -39,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog',
     'useradmin',
+    'clienti',
 ]
 
 MIDDLEWARE = [

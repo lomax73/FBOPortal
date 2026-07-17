@@ -13,3 +13,7 @@ media/
 .idea/
 .vscode/
 .claude/
+
+# Elenchi clienti reali usati come riferimento/import: dati commerciali,
+# mai in git.
+lista clienti*.xlsx

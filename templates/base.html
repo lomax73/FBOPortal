@@ -86,6 +86,7 @@
         Portale FBO
     </a>
     <div class="user-box">
+        <a href="{% url 'cliente-list' %}" style="color:#cbd8e2;">Clienti</a>
         <a href="{% url 'user-list' %}" style="color:#cbd8e2;">Utenti</a>
         <span>{{ user.username }}</span>
         <form method="post" action="{% url 'logout' %}">

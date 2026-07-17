@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Elimina cliente — Portale FBO{% endblock %}
+
+{% block content %}
+<h1>Elimina cliente</h1>
+<div class="card">
+    <p>
+        Eliminare <strong>{{ object.ragione_sociale }}</strong>? Se qualche app satellite
+        (es. FBOPreventivi) ha ancora documenti collegati a questo cliente, smetteranno di
+        mostrarne correttamente i dati. L'operazione è definitiva.
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn" style="background:#ef4444;" type="submit">Elimina</button>
+        <a class="btn btn-secondary" href="{% url 'cliente-list' %}">Annulla</a>
+    </form>
+</div>
+{% endblock %}
