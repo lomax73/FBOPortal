@@ -22,7 +22,3 @@ lista clienti*.xlsx
 # commerciali dei clienti, mai in git; cancellati automaticamente dopo
 # la conferma).
 /clienti_import_tmp/
-
-# Esempi reali di report rack/patch panel di clienti, usati come
-# riferimento: dati commerciali, mai in git.
-Data_Rack_ports_*.pdf

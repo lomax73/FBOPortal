@@ -57,27 +57,6 @@ FBOPreventivi) configura nel proprio `.env`:
 - `PORTAL_INTERNAL_BASE_URL` (es. `https://127.0.0.1:8443`)
 - `PORTAL_API_TOKEN` (stesso valore di `INTERNAL_API_TOKEN` qui sopra)
 
-## Report rack/patch panel (app `rackreport`)
-
-Il PDF è generato con WeasyPrint, che richiede librerie di sistema (non
-pacchetti Python), stessa nota già in `FBOFiberReport/deploy/README.md`:
-
-```
-apt install libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libcairo2
-```
-
-Gli allegati caricati sui rack (report degli strumenti di verifica) sono
-la prima cosa che il Portale salva in `media/`: va creata la cartella al
-provisioning (o al primo deploy di questa funzionalità se il Portale è
-già in produzione):
-
-```
-mkdir -p /opt/portal/app/media && chown portal:portal /opt/portal/app/media
-```
-
-Il blocco Nginx `location /media/` è già incluso in
-`nginx-portal-ip-provisional.conf`/`nginx-portal.conf`.
-
 ## Deploy di un aggiornamento
 
 ```

@@ -4,5 +4,3 @@ gunicorn
 cryptography
 requests
 openpyxl
-weasyprint
-pillow
