@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'catalog',
     'useradmin',
     'clienti',
+    'rackreport',
 ]
 
 MIDDLEWARE = [
@@ -139,5 +140,11 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Allegati caricati dagli utenti (report rack/patch panel). Prima volta
+# che il Portale gestisce upload di file — finora solo i loghi delle app
+# in staticfiles/ (statici, non caricati da utenti).
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
