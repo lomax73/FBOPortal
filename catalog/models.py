@@ -37,7 +37,7 @@ class AppLink(models.Model):
     )
 
     class Meta:
-        ordering = ['categoria', 'order', 'name']
+        ordering = ['-categoria', 'order', 'name']
 
     def __str__(self):
         return self.name
