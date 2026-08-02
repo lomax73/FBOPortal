@@ -36,14 +36,20 @@
     .app-card .app-name { font-family: var(--font-display); font-weight: 600; color: var(--navy); }
     .app-card .app-description { font-size: 0.85rem; color: #64748b; }
     .empty-state { color: #64748b; }
+    .section-title { font-family: var(--font-display); font-weight: 600; color: var(--navy); margin: 2rem 0 1rem; }
+    .section-title:first-of-type { margin-top: 0.5rem; }
+    .section-divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
 </style>
 {% endblock %}
 
 {% block content %}
 <h1>Le tue applicazioni</h1>
 {% if apps %}
+{% regroup apps by get_categoria_display as app_groups %}
+{% for group in app_groups %}
+<h2 class="section-title">{{ group.grouper }}</h2>
 <div class="grid">
-    {% for app in apps %}
+    {% for app in group.list %}
     <a class="app-card" href="{{ app.url }}" target="_blank" rel="noopener">
         <span class="app-icon">
             {% if app.icon %}
@@ -57,6 +63,8 @@
     </a>
     {% endfor %}
 </div>
+{% if not forloop.last %}<hr class="section-divider">{% endif %}
+{% endfor %}
 {% else %}
 <p class="empty-state">Nessuna applicazione configurata. Aggiungine una dall'<a href="{% url 'admin:index' %}">area admin</a>.</p>
 {% endif %}

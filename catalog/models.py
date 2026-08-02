@@ -4,6 +4,16 @@ from .fields import EncryptedCharField
 
 
 class AppLink(models.Model):
+    class Categoria(models.TextChoices):
+        INTERNA = 'interna', 'Applicazioni interne'
+        CLIENTE = 'cliente', 'Applicazioni clienti'
+
+    categoria = models.CharField(
+        max_length=20,
+        choices=Categoria.choices,
+        default=Categoria.INTERNA,
+        help_text="Sezione del launcher in cui compare la card.",
+    )
     name = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100, unique=True)
     description = models.CharField(max_length=255, blank=True)
@@ -27,7 +37,7 @@ class AppLink(models.Model):
     )
 
     class Meta:
-        ordering = ['order', 'name']
+        ordering = ['categoria', 'order', 'name']
 
     def __str__(self):
         return self.name
