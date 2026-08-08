@@ -11,6 +11,7 @@
         gap: 1.25rem;
     }
     .app-card {
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -24,6 +25,19 @@
         text-align: center;
         transition: box-shadow 0.15s ease, transform 0.15s ease;
     }
+    .app-status-dot {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px #fff;
+    }
+    .app-status-dot.status-produzione { background: #2f9e5c; }
+    .app-status-dot.status-beta { background: #2563eb; }
+    .app-status-dot.status-sviluppo { background: #e0a213; }
+    .app-status-dot.status-manutenzione { background: #d92d20; }
     .app-card:hover { box-shadow: 0 8px 24px rgba(18, 50, 71, 0.12); transform: translateY(-2px); }
     .app-card .app-icon {
         width: 56px; height: 56px; border-radius: 50%;
@@ -51,6 +65,7 @@
 <div class="grid">
     {% for app in group.list %}
     <a class="app-card" href="{{ app.url }}" target="_blank" rel="noopener">
+        <span class="app-status-dot status-{{ app.dev_status }}" title="{{ app.get_dev_status_display }}"></span>
         <span class="app-icon">
             {% if app.icon %}
                 <img src="{% static 'img/' %}{{ app.icon }}" alt="">

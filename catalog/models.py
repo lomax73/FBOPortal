@@ -8,6 +8,12 @@ class AppLink(models.Model):
         INTERNA = 'interna', 'Applicazioni interne'
         CLIENTE = 'cliente', 'Applicazioni clienti'
 
+    class DevStatus(models.TextChoices):
+        PRODUZIONE = 'produzione', 'In produzione'
+        BETA = 'beta', 'Beta'
+        SVILUPPO = 'sviluppo', 'In sviluppo'
+        MANUTENZIONE = 'manutenzione', 'In manutenzione'
+
     categoria = models.CharField(
         max_length=20,
         choices=Categoria.choices,
@@ -25,6 +31,12 @@ class AppLink(models.Model):
     )
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
+    dev_status = models.CharField(
+        max_length=20,
+        choices=DevStatus.choices,
+        default=DevStatus.PRODUZIONE,
+        help_text="Mostrato come pallino colorato sulla card.",
+    )
 
     internal_base_url = models.URLField(
         'URL base API interna', blank=True,
