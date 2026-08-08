@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-label="FBOFlag">
+  <rect x="8" y="8" width="84" height="84" rx="20" fill="#123247"/>
+  <line x1="34" y1="20" x2="34" y2="82" stroke="#ffffff" stroke-width="5" stroke-linecap="round"/>
+  <path d="M34,24 L76,33 L60,44 L76,55 L34,46 Z" fill="#d92d20" stroke="#d92d20" stroke-linejoin="round"/>
+  <circle cx="34" cy="82" r="4.5" fill="#27a5de"/>
+</svg>
