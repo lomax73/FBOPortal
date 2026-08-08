@@ -25,19 +25,28 @@
         text-align: center;
         transition: box-shadow 0.15s ease, transform 0.15s ease;
     }
-    .app-status-dot {
+    .app-status {
         position: absolute;
-        top: 12px;
-        right: 12px;
+        top: 10px;
+        right: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+    }
+    .app-status-dot {
         width: 10px;
         height: 10px;
         border-radius: 50%;
         box-shadow: 0 0 0 2px #fff;
     }
-    .app-status-dot.status-produzione { background: #2f9e5c; }
-    .app-status-dot.status-beta { background: #2563eb; }
-    .app-status-dot.status-sviluppo { background: #e0a213; }
-    .app-status-dot.status-manutenzione { background: #d92d20; }
+    .app-status-label {
+        font-size: 0.62rem;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        letter-spacing: 0.01em;
+    }
     .app-card:hover { box-shadow: 0 8px 24px rgba(18, 50, 71, 0.12); transform: translateY(-2px); }
     .app-card .app-icon {
         width: 56px; height: 56px; border-radius: 50%;
@@ -65,7 +74,12 @@
 <div class="grid">
     {% for app in group.list %}
     <a class="app-card" href="{{ app.url }}" target="_blank" rel="noopener">
-        <span class="app-status-dot status-{{ app.dev_status }}" title="{{ app.get_dev_status_display }}"></span>
+        {% if app.dev_status %}
+        <span class="app-status">
+            <span class="app-status-dot" style="background: {{ app.dev_status.color }};"></span>
+            <span class="app-status-label" style="color: {{ app.dev_status.color }};">{{ app.dev_status.name }}</span>
+        </span>
+        {% endif %}
         <span class="app-icon">
             {% if app.icon %}
                 <img src="{% static 'img/' %}{{ app.icon }}" alt="">

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Stato app — Portale FBO{% endblock %}
+
+{% block content %}
+<h1>Stato app</h1>
+<p style="color:#64748b; margin-top:-0.5rem;">
+    Assegna a ogni app lo stato di sviluppo mostrato sulla card del launcher.
+    <a href="{% url 'status-config-list' %}">Configura gli stati disponibili</a>.
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>App</th>
+                <th>Categoria</th>
+                <th>Stato</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in apps %}
+            <tr>
+                <td>{{ app.name }}</td>
+                <td>{{ app.get_categoria_display }}</td>
+                <td>
+                    <select name="status_{{ app.pk }}">
+                        <option value="">— nessuno —</option>
+                        {% for status in statuses %}
+                        <option value="{{ status.pk }}" {% if app.dev_status_id == status.pk %}selected{% endif %}>{{ status.name }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p style="margin-top:1.25rem;">
+        <button class="btn" type="submit">Salva tutti</button>
+    </p>
+</form>
+{% endblock %}

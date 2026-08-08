@@ -88,6 +88,7 @@
     <div class="user-box">
         <a href="{% url 'cliente-list' %}" style="color:#cbd8e2;">Clienti</a>
         <a href="{% url 'user-list' %}" style="color:#cbd8e2;">Utenti</a>
+        <a href="{% url 'app-status-list' %}" style="color:#cbd8e2;">Stato app</a>
         <span>{{ user.username }}</span>
         <form method="post" action="{% url 'logout' %}">
             {% csrf_token %}

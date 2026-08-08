@@ -1,18 +1,42 @@
 from django.db import models
+from django.utils.text import slugify
 
 from .fields import EncryptedCharField
+
+
+class AppStatus(models.Model):
+    name = models.CharField(
+        max_length=50, unique=True,
+        help_text='Es. "In produzione" — è il titolo mostrato sotto il pallino sulla card.',
+    )
+    slug = models.SlugField(max_length=50, unique=True, blank=True)
+    color = models.CharField(
+        max_length=7, default='#2f9e5c',
+        help_text='Colore esadecimale, es. #2f9e5c. Usato sia per il pallino sia per il titolo.',
+    )
+    description = models.CharField(
+        max_length=255, blank=True,
+        help_text="Visibile solo in questa pagina di configurazione, non sulle card.",
+    )
+
+    class Meta:
+        ordering = ['name']
+        verbose_name = 'stato app'
+        verbose_name_plural = 'stati app'
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
 
 
 class AppLink(models.Model):
     class Categoria(models.TextChoices):
         INTERNA = 'interna', 'Applicazioni interne'
         CLIENTE = 'cliente', 'Applicazioni clienti'
-
-    class DevStatus(models.TextChoices):
-        PRODUZIONE = 'produzione', 'In produzione'
-        BETA = 'beta', 'Beta'
-        SVILUPPO = 'sviluppo', 'In sviluppo'
-        MANUTENZIONE = 'manutenzione', 'In manutenzione'
 
     categoria = models.CharField(
         max_length=20,
@@ -31,11 +55,10 @@ class AppLink(models.Model):
     )
     order = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
-    dev_status = models.CharField(
-        max_length=20,
-        choices=DevStatus.choices,
-        default=DevStatus.PRODUZIONE,
-        help_text="Mostrato come pallino colorato sulla card.",
+    dev_status = models.ForeignKey(
+        AppStatus, on_delete=models.PROTECT, related_name='apps',
+        null=True, blank=True,
+        help_text="Mostrato come pallino colorato con etichetta sulla card.",
     )
 
     internal_base_url = models.URLField(

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Configura stati — Portale FBO{% endblock %}
+
+{% block content %}
+<h1>Configura stati</h1>
+<p style="color:#64748b; margin-top:-0.5rem;">
+    Gli stati creati qui sono selezionabili nella pagina <a href="{% url 'app-status-list' %}">Stato app</a>.
+</p>
+
+<p><a class="btn" href="{% url 'status-config-create' %}">Nuovo stato</a></p>
+
+{% if statuses %}
+<table>
+    <thead>
+        <tr>
+            <th>Colore</th>
+            <th>Titolo</th>
+            <th>Descrizione</th>
+            <th>App</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for status in statuses %}
+        <tr>
+            <td><span style="display:inline-block; width:14px; height:14px; border-radius:50%; background:{{ status.color }}; box-shadow:0 0 0 1px rgba(0,0,0,.1);"></span></td>
+            <td style="color:{{ status.color }}; font-weight:600;">{{ status.name }}</td>
+            <td style="color:#64748b;">{{ status.description|default:"—" }}</td>
+            <td>{{ status.apps.count }}</td>
+            <td>
+                <a href="{% url 'status-config-update' status.pk %}">Modifica</a>
+                &nbsp;·&nbsp;
+                <a href="{% url 'status-config-delete' status.pk %}" style="color:#ef4444;">Elimina</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="color:#64748b;">Nessuno stato configurato ancora.</p>
+{% endif %}
+{% endblock %}

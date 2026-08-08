@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from .models import AppLink
+from .models import AppLink, AppStatus
+
+
+@admin.register(AppStatus)
+class AppStatusAdmin(admin.ModelAdmin):
+    list_display = ('name', 'color', 'description')
+    prepopulated_fields = {'slug': ('name',)}
 
 
 @admin.register(AppLink)

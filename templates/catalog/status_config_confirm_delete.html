@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Elimina stato — Portale FBO{% endblock %}
+
+{% block content %}
+<h1>Elimina stato</h1>
+<div class="card">
+    <p>Eliminare lo stato <strong style="color:{{ status.color }};">{{ status.name }}</strong>?</p>
+    {% if apps_using_it %}
+    <p style="color:#ef4444;">
+        Non puoi eliminarlo: è assegnato a {{ apps_using_it.count }} app
+        ({% for app in apps_using_it %}{{ app.name }}{% if not forloop.last %}, {% endif %}{% endfor %}).
+        Cambia prima il loro stato dalla pagina <a href="{% url 'app-status-list' %}">Stato app</a>.
+    </p>
+    <a class="btn btn-secondary" href="{% url 'status-config-list' %}">Torna indietro</a>
+    {% else %}
+    <form method="post">
+        {% csrf_token %}
+        <button class="btn" style="background:#ef4444;" type="submit">Elimina</button>
+        <a class="btn btn-secondary" href="{% url 'status-config-list' %}">Annulla</a>
+    </form>
+    {% endif %}
+</div>
+{% endblock %}
