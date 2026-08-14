@@ -18,3 +18,14 @@ Report generati dalla skill `redflag`: segnalazioni FBOFlag esaminate e verifica
 
 ### Per chi riprende questo progetto
 Se un'altra app collegata alla gestione utenti smette di rispondere con un errore simile ("non raggiungibile: HTTP 404" o 403 inatteso), controlla per prima cosa se la sua `internal_base_url` (admin di Django, modello `AppLink`) usa una porta condivisa con altri vhost invece di una porta dedicata — è la causa più probabile su questa VPS, dato lo schema di deploy con più app dietro lo stesso nginx.
+
+## 2026-08-14 — sessione redflag
+
+### Segnalazioni FBOFlag
+- [Conclusa] "pagina impostazioni x variare la descrizione delle schede" (testata e confermata dall'utente) — la descrizione di ogni card (`AppLink.description`) era modificabile solo da `/admin/`; aggiunta pagina dedicata `/descrizioni-app/` (`catalog/views.py:app_description_list`, template `catalog/app_description_list.html`), linkata dalla topbar in `templates/base.html` accanto a "Stato app", stesso pattern (form unico, salva tutte le righe in un colpo).
+
+### Verifica rapida del codice
+Saltata in questa sessione su richiesta dell'utente — da fare alla prossima sessione redflag su questo progetto, prima di chiudere altre note.
+
+### Per chi riprende questo progetto
+La verifica rapida del codice per `catalog`/FBOPortal non è ancora stata fatta in questa sessione: alla prossima ripresa vale la pena farla prima di passare a nuove note. Nessun'altra nota FBOFlag aperta o approvata per `portal` al momento di chiudere questa sessione.
