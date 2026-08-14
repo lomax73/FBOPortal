@@ -34,6 +34,20 @@ def app_status_list(request):
 
 
 @login_required
+def app_description_list(request):
+    apps = AppLink.objects.all()
+
+    if request.method == 'POST':
+        for app in apps:
+            app.description = request.POST.get(f'description_{app.pk}', '').strip()
+            app.save(update_fields=['description'])
+        messages.success(request, 'Descrizioni aggiornate.')
+        return redirect('app-description-list')
+
+    return render(request, 'catalog/app_description_list.html', {'apps': apps})
+
+
+@login_required
 def status_config_list(request):
     statuses = AppStatus.objects.all()
     return render(request, 'catalog/status_config_list.html', {'statuses': statuses})

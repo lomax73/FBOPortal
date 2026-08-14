@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Descrizioni app — Portale FBO{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'home' %}">&larr; Torna alle app</a></p>
+<h1>Descrizioni app</h1>
+<p style="color:#64748b; margin-top:-0.5rem;">
+    Modifica la descrizione mostrata su ogni card del launcher.
+</p>
+
+<form method="post">
+    {% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th>App</th>
+                <th>Categoria</th>
+                <th>Descrizione</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for app in apps %}
+            <tr>
+                <td>{{ app.name }}</td>
+                <td>{{ app.get_categoria_display }}</td>
+                <td>
+                    <input type="text" name="description_{{ app.pk }}" value="{{ app.description }}" maxlength="255" style="width:100%;">
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p style="margin-top:1.25rem;">
+        <button class="btn" type="submit">Salva tutte</button>
+    </p>
+</form>
+{% endblock %}
