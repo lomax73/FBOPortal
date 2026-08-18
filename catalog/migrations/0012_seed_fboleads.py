@@ -8,11 +8,9 @@ def seed_fboleads(apps, schema_editor):
         defaults={
             'name': 'FBOLeads',
             'description': 'Contatti raccolti dai siti web, con assegnazione e archivio',
-            # Provvisorio: stessa IP nuda del VPS, porta dedicata (8451,
-            # libera: 8444 Collaudi, 8445 Preventivi, 8446 RackReport,
-            # 8447 NetVault, 8448 Squadfy), finché non esiste un dominio
-            # reale (vedi deploy/README.md di FBOLeads).
-            'url': 'https://94.177.161.127:8451/',
+            # Dominio dedicato (lead.fbosolution.it), sostituisce l'IP nudo
+            # su porta dedicata (vedi deploy/README.md di FBOLeads).
+            'url': 'https://lead.fbosolution.it/',
             'icon': 'fboleads.svg',
             'order': 7,
         },
