@@ -26,7 +26,7 @@ def noop(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('catalog', '0010_applink_dev_status_to_fk'),
+        ('catalog', '0011_applink_internal_ca_cert'),
     ]
 
     operations = [
