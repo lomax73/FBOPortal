@@ -70,6 +70,13 @@ class AppLink(models.Model):
         blank=True, null=True,
         help_text='Stesso valore di INTERNAL_API_TOKEN nel .env di quella app. Cifrato a riposo.',
     )
+    internal_ca_cert = models.CharField(
+        'Certificato TLS (pinning)', max_length=255, blank=True,
+        help_text="Percorso del certificato usato per verificare la connessione a internal_base_url "
+                   "(es. /etc/ssl/mkremote/selfsigned.crt), invece di disattivare la verifica TLS "
+                   "(RedFlag id 87). Se vuoto, la verifica standard si applica e fallirà per i "
+                   "certificati self-signed dell'IP del VPS.",
+    )
 
     class Meta:
         ordering = ['-categoria', 'order', 'name']

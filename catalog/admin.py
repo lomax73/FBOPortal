@@ -17,8 +17,9 @@ class AppLinkAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('name', 'slug', 'categoria', 'dev_status', 'description', 'url', 'icon', 'order', 'is_active')}),
         ('Gestione utenti da remoto', {
-            'fields': ('internal_base_url', 'api_token'),
-            'description': 'Compilare entrambi solo per le app che espongono accounts/api/internal/ '
-                           '(vedi deploy/README.md di quell\'app).',
+            'fields': ('internal_base_url', 'api_token', 'internal_ca_cert'),
+            'description': 'Compilare i primi due solo per le app che espongono accounts/api/internal/ '
+                           '(vedi deploy/README.md di quell\'app). internal_ca_cert punta al certificato '
+                           'usato per verificare la connessione invece di disattivare la verifica TLS.',
         }),
     )
