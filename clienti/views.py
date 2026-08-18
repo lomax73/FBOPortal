@@ -94,8 +94,18 @@ def cliente_import_confirm(request):
         return redirect('cliente-import')
 
     token = request.POST.get('token', '')
+    try:
+        # Il token è sempre un uuid4().hex generato server-side in
+        # cliente_import_upload(): validarne il formato prima di costruire
+        # il path impedisce un path traversal se il campo hidden viene
+        # manomesso (RedFlag id 88).
+        uuid.UUID(hex=token)
+    except ValueError:
+        messages.error(request, 'Il file caricato non è più disponibile: ricarica l\'import.')
+        return redirect('cliente-import')
+
     path = IMPORT_TMP_DIR / f'{token}.xlsx'
-    if not token or not path.exists():
+    if not path.exists():
         messages.error(request, 'Il file caricato non è più disponibile: ricarica l\'import.')
         return redirect('cliente-import')
 
