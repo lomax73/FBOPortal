@@ -29,6 +29,9 @@ sudo -u portal python3 -m venv venv
 sudo -u portal venv/bin/pip install -r requirements.txt
 
 cp .env.example .env   # poi valorizzare DJANGO_SECRET_KEY, DJANGO_ALLOWED_HOSTS=portal.tuodominio.it, INTERNAL_API_TOKEN
+                        # DJANGO_DEBUG=false — .env.example lo lascia a "true", NON dimenticarlo:
+                        # con DEBUG=True qualunque eccezione espone MASTER_ENCRYPTION_KEY in
+                        # chiaro, con cui si decifrano i token di TUTTE le app satellite collegate
 sudo -u portal venv/bin/python manage.py migrate
 sudo -u portal venv/bin/python manage.py collectstatic --noinput
 sudo -u portal venv/bin/python manage.py createsuperuser
