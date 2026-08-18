@@ -88,7 +88,6 @@
     <div class="user-box">
         <a href="{% url 'cliente-list' %}" style="color:#cbd8e2;">Clienti</a>
         <a href="{% url 'user-list' %}" style="color:#cbd8e2;">Utenti</a>
-        {% if fbo_leads_url %}<a href="{{ fbo_leads_url }}" target="_blank" rel="noopener" style="color:#cbd8e2;">Leads</a>{% endif %}
         <a href="{% url 'app-status-list' %}" style="color:#cbd8e2;">Stato app</a>
         <a href="{% url 'app-description-list' %}" style="color:#cbd8e2;">Descrizioni app</a>
         <span>{{ user.username }}</span>
