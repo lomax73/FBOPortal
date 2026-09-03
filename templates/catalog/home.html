@@ -109,6 +109,17 @@
     .gateway-refresh { font-size: 0.72rem; color: #64748b; }
     .gateway-title { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
     .gateway-title .section-title { margin: 0; }
+    .gateway-toggle {
+        background: none;
+        border: none;
+        color: #64748b;
+        cursor: pointer;
+        font-size: 0.8rem;
+        line-height: 1;
+        padding: 0;
+        font-family: var(--font-body);
+    }
+    .gateway-toggle:hover { color: var(--azure-dark); }
     .gateway-summary { font-size: 0.74rem; font-weight: 600; color: #64748b; }
     .gateway-summary .on { color: #16a34a; }
     .gateway-summary .off { color: #dc2626; }
@@ -166,6 +177,7 @@
 <section class="gateway-widget" id="gateway-widget">
     <div class="gateway-header">
         <div class="gateway-title">
+            <button type="button" class="gateway-toggle" id="gateway-toggle" aria-expanded="true" title="Riduci">▾</button>
             <h2 class="section-title">Server &amp; VPS</h2>
             <span class="gateway-summary" id="gateway-summary"></span>
         </div>
@@ -398,6 +410,29 @@
             panel.innerHTML = '';
         }
     });
+
+    var toggleBtn = document.getElementById('gateway-toggle');
+    var collapseKey = 'fbo.gateway.collapsed';
+
+    function setCollapsed(collapsed) {
+        container.style.display = collapsed ? 'none' : '';
+        if (toggleBtn) {
+            toggleBtn.textContent = collapsed ? '▸' : '▾';
+            toggleBtn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+            toggleBtn.title = collapsed ? 'Espandi' : 'Riduci';
+        }
+        try { localStorage.setItem(collapseKey, collapsed ? '1' : '0'); } catch (e) {}
+    }
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            setCollapsed(container.style.display !== 'none');
+        });
+    }
+
+    try {
+        if (localStorage.getItem(collapseKey) === '1') setCollapsed(true);
+    } catch (e) {}
 
     loadStatus();
     setInterval(loadStatus, 15000);
