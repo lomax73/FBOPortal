@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import ListView
 
+from . import gateway
 from .forms import AppStatusForm
 from .models import AppLink, AppStatus
 
@@ -15,6 +17,31 @@ class HomeView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return AppLink.objects.filter(is_active=True)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        app_link = gateway.get_app_link()
+        context['gateway_app'] = app_link
+        context['gateway_configured'] = gateway.is_configured(app_link)
+        return context
+
+
+@login_required
+def gateway_status(request):
+    try:
+        targets = gateway.list_targets()
+    except gateway.GatewayError as exc:
+        return JsonResponse({'error': str(exc)}, status=502)
+    return JsonResponse({'targets': targets})
+
+
+@login_required
+def gateway_target_resources(request, pk):
+    try:
+        usage = gateway.target_resources(pk)
+    except gateway.GatewayError as exc:
+        return JsonResponse({'error': str(exc)}, status=502)
+    return JsonResponse(usage)
 
 
 @login_required

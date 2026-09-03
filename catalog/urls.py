@@ -4,6 +4,8 @@ from . import views
 
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
+    path('gateway/status/', views.gateway_status, name='gateway-status'),
+    path('gateway/targets/<int:pk>/risorse/', views.gateway_target_resources, name='gateway-target-resources'),
     path('stato-app/', views.app_status_list, name='app-status-list'),
     path('descrizioni-app/', views.app_description_list, name='app-description-list'),
     path('stati/', views.status_config_list, name='status-config-list'),

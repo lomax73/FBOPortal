@@ -47,6 +47,29 @@
         white-space: nowrap;
         letter-spacing: 0.01em;
     }
+    .app-live-badge {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.62rem;
+        font-weight: 700;
+        line-height: 1;
+        white-space: nowrap;
+        letter-spacing: 0.01em;
+    }
+    .app-live-badge[hidden] { display: none; }
+    .app-live-dot { width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 0 2px #fff; }
+    .app-live-badge.ok { color: #16a34a; }
+    .app-live-badge.ok .app-live-dot { background: #16a34a; }
+    .app-live-badge.warn { color: #d97706; }
+    .app-live-badge.warn .app-live-dot { background: #d97706; }
+    .app-live-badge.down { color: #dc2626; }
+    .app-live-badge.down .app-live-dot { background: #dc2626; }
+    .app-live-badge.muted { color: #94a3b8; }
+    .app-live-badge.muted .app-live-dot { background: #94a3b8; }
     .app-card:hover { box-shadow: 0 8px 24px rgba(18, 50, 71, 0.12); transform: translateY(-2px); }
     .app-card .app-icon {
         width: 56px; height: 56px; border-radius: 50%;
@@ -62,11 +85,98 @@
     .section-title { font-family: var(--font-display); font-weight: 600; color: var(--navy); margin: 2rem 0 1rem; }
     .section-title:first-of-type { margin-top: 0.5rem; }
     .section-divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+    .gateway-widget {
+        background: #fff;
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        box-shadow: 0 1px 2px rgba(18, 50, 71, 0.06);
+        padding: 1.25rem 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .gateway-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    .gateway-header .section-title { margin: 0; }
+    .gateway-actions { display: flex; align-items: center; gap: 1rem; }
+    .gateway-link { font-size: 0.85rem; font-weight: 600; color: var(--azure-dark); text-decoration: none; white-space: nowrap; }
+    .gateway-link:hover { text-decoration: underline; }
+    .gateway-refresh { font-size: 0.8rem; color: #64748b; }
+    .gateway-title { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .gateway-title .section-title { margin: 0; }
+    .gateway-summary { font-size: 0.8rem; font-weight: 600; color: #64748b; }
+    .gateway-summary .on { color: #16a34a; }
+    .gateway-summary .off { color: #dc2626; }
+    .gateway-list { list-style: none; margin: 0; padding: 0; }
+    .gateway-host {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+        padding: 0.7rem 0;
+        border-top: 1px solid var(--border);
+    }
+    .gateway-host:first-child { border-top: none; }
+    .gateway-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; flex-shrink: 0; }
+    .gateway-dot.online { background: #22c55e; box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.18); }
+    .gateway-dot.offline { background: #94a3b8; box-shadow: 0 0 0 3px rgba(148, 163, 184, 0.18); }
+    .gateway-name { font-weight: 600; color: var(--navy); }
+    .gateway-meta { font-size: 0.82rem; color: #64748b; }
+    .gateway-state { margin-left: auto; font-size: 0.8rem; font-weight: 700; }
+    .gateway-state.online { color: #16a34a; }
+    .gateway-state.offline { color: #64748b; }
+    .gateway-details-btn {
+        background: none;
+        border: 1px solid var(--border);
+        color: var(--navy);
+        border-radius: 6px;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.78rem;
+        cursor: pointer;
+        font-family: var(--font-body);
+    }
+    .gateway-details-btn:hover { border-color: var(--azure); color: var(--azure-dark); }
+    .gateway-details {
+        width: 100%;
+        margin-top: 0.4rem;
+        padding: 0.75rem 1rem;
+        background: #f1f5f9;
+        border-radius: 8px;
+        font-size: 0.85rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 0.5rem 1rem;
+    }
+    .gateway-details .k { color: #64748b; font-size: 0.78rem; }
+    .gateway-details .v { font-weight: 600; color: var(--ink); }
+    .gateway-note { font-size: 0.82rem; color: #64748b; }
+    .gateway-error { color: #b91c1c; font-size: 0.85rem; }
 </style>
 {% endblock %}
 
 {% block content %}
 <h1>Le tue applicazioni</h1>
+{% if gateway_app %}
+<section class="gateway-widget" id="gateway-widget">
+    <div class="gateway-header">
+        <div class="gateway-title">
+            <h2 class="section-title">Server &amp; VPS</h2>
+            <span class="gateway-summary" id="gateway-summary"></span>
+        </div>
+        <div class="gateway-actions">
+            <span class="gateway-refresh" id="gateway-refresh-note"></span>
+            <a class="gateway-link" href="{{ gateway_app.url }}" target="_blank" rel="noopener">Apri FBOAIGate &rarr;</a>
+        </div>
+    </div>
+    <div id="gateway-status">
+        <p class="gateway-note">Caricamento stato host…</p>
+    </div>
+</section>
+{% endif %}
 {% if apps %}
 {% regroup apps by get_categoria_display as app_groups %}
 {% for group in app_groups %}
@@ -74,6 +184,11 @@
 <div class="grid">
     {% for app in group.list %}
     <a class="app-card" href="{{ app.url }}" target="_blank" rel="noopener">
+        {% if app.slug == 'fboaigate' %}
+        <span class="app-live-badge" id="gateway-card-badge" hidden>
+            <span class="app-live-dot"></span><span class="app-live-text"></span>
+        </span>
+        {% endif %}
         {% if app.dev_status %}
         <span class="app-status">
             <span class="app-status-dot" style="background: {{ app.dev_status.color }};"></span>
@@ -96,5 +211,172 @@
 {% endfor %}
 {% else %}
 <p class="empty-state">Nessuna applicazione configurata. Aggiungine una dall'<a href="{% url 'admin:index' %}">area admin</a>.</p>
+{% endif %}
+
+{% if gateway_app %}
+<script>
+(function () {
+    var widget = document.getElementById('gateway-widget');
+    if (!widget) return;
+    var container = document.getElementById('gateway-status');
+    var note = document.getElementById('gateway-refresh-note');
+    var summaryEl = document.getElementById('gateway-summary');
+    var cardBadge = document.getElementById('gateway-card-badge');
+    var statusUrl = '{% url "gateway-status" %}';
+    var resourcesUrlTemplate = '{% url "gateway-target-resources" 0 %}';
+    var configured = {{ gateway_configured|yesno:"true,false" }};
+
+    function esc(value) {
+        return String(value == null ? '' : value).replace(/[&<>"']/g, function (c) {
+            return {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c];
+        });
+    }
+
+    function formatContact(iso) {
+        if (!iso) return 'mai';
+        var d = new Date(iso);
+        if (isNaN(d.getTime())) return iso;
+        return d.toLocaleString('it-IT', {
+            day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+    }
+
+    function updateSummary(targets) {
+        if (!summaryEl) return;
+        var total = targets.length;
+        var online = targets.filter(function (t) { return t.online; }).length;
+        var offline = total - online;
+        if (!total) {
+            summaryEl.innerHTML = '';
+            return;
+        }
+        if (offline === 0) {
+            summaryEl.innerHTML = '<span class="on">' + online + ' online</span>';
+        } else {
+            summaryEl.innerHTML = '<span class="on">' + online + ' online</span> &middot; <span class="off">' + offline + ' offline</span>';
+        }
+    }
+
+    function updateCardBadge(targets) {
+        if (!cardBadge) return;
+        var total = targets.length;
+        var online = targets.filter(function (t) { return t.online; }).length;
+        var offline = total - online;
+        var text = cardBadge.querySelector('.app-live-text');
+        cardBadge.classList.remove('ok', 'warn', 'down', 'muted');
+        if (!total) {
+            cardBadge.classList.add('muted');
+            text.textContent = 'nessun host';
+        } else if (offline === 0) {
+            cardBadge.classList.add('ok');
+            text.textContent = online + ' online';
+        } else if (online === 0) {
+            cardBadge.classList.add('down');
+            text.textContent = offline + ' offline';
+        } else {
+            cardBadge.classList.add('warn');
+            text.textContent = offline + ' offline';
+        }
+        cardBadge.hidden = false;
+    }
+
+    function clearBadges() {
+        if (summaryEl) summaryEl.innerHTML = '';
+        if (cardBadge) cardBadge.hidden = true;
+    }
+
+    function render(targets) {
+        targets = targets || [];
+        updateSummary(targets);
+        updateCardBadge(targets);
+        if (!targets.length) {
+            container.innerHTML = '<p class="gateway-note">Nessun host registrato su FBOAIGate.</p>';
+            return;
+        }
+        var html = '<ul class="gateway-list">';
+        targets.forEach(function (t) {
+            var online = !!t.online;
+            html += '<li class="gateway-host">';
+            html += '<span class="gateway-dot ' + (online ? 'online' : 'offline') + '"></span>';
+            html += '<span class="gateway-name">' + esc(t.nome) + '</span>';
+            html += '<span class="gateway-meta">' + esc(t.vpn_ip) + '</span>';
+            html += '<span class="gateway-meta">contatto: ' + esc(formatContact(t.ultimo_contatto)) + '</span>';
+            html += '<span class="gateway-state ' + (online ? 'online' : 'offline') + '">' + (online ? 'Online' : 'Offline') + '</span>';
+            if (online) {
+                html += '<button type="button" class="gateway-details-btn" data-id="' + t.id + '">Risorse</button>';
+            }
+            html += '<div class="gateway-details" data-panel="' + t.id + '" style="display:none;"></div>';
+            html += '</li>';
+        });
+        html += '</ul>';
+        container.innerHTML = html;
+    }
+
+    function loadStatus() {
+        if (!configured) {
+            clearBadges();
+            container.innerHTML = '<p class="gateway-error">Integrazione FBOAIGate non configurata: impostare internal_base_url e api_token sulla card FBOAIGate (admin del Portale).</p>';
+            return;
+        }
+        fetch(statusUrl, { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.error) {
+                    clearBadges();
+                    container.innerHTML = '<p class="gateway-error">Stato non disponibile: ' + esc(data.error) + '</p>';
+                } else {
+                    render(data.targets);
+                }
+                note.textContent = 'aggiornato ' + new Date().toLocaleTimeString('it-IT');
+            })
+            .catch(function () {
+                clearBadges();
+                container.innerHTML = '<p class="gateway-error">Impossibile contattare FBOAIGate.</p>';
+            });
+    }
+
+    container.addEventListener('click', function (event) {
+        var btn = event.target.closest('.gateway-details-btn');
+        if (!btn) return;
+        var id = btn.getAttribute('data-id');
+        var panel = container.querySelector('[data-panel="' + id + '"]');
+        if (!panel) return;
+
+        if (panel.style.display === 'none') {
+            panel.style.display = 'grid';
+            panel.innerHTML = '<span class="gateway-note">Caricamento risorse…</span>';
+            var resourcesUrl = resourcesUrlTemplate.replace('/0/', '/' + id + '/');
+            fetch(resourcesUrl, { headers: { 'Accept': 'application/json' } })
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    if (d.error) {
+                        panel.innerHTML = '<span class="gateway-error">' + esc(d.error) + '</span>';
+                        return;
+                    }
+                    var load = d.load ? (d.load['1min'] + ' / ' + d.load['5min'] + ' / ' + d.load['15min']) : 'n/d';
+                    var mem = d.memory ? (d.memory.used_mb + ' / ' + d.memory.total_mb + ' MB') : 'n/d';
+                    var disk = d.disk ? (d.disk.used + ' / ' + d.disk.size + ' (' + d.disk.percent + ')') : 'n/d';
+                    var temp = (d.temperature_c === null || d.temperature_c === undefined) ? 'n/d' : d.temperature_c + ' °C';
+                    panel.innerHTML =
+                        '<div><div class="k">Sistema</div><div class="v">' + esc(d.os || 'n/d') + '</div></div>' +
+                        '<div><div class="k">Accensione</div><div class="v">' + esc(d.uptime || 'n/d') + '</div></div>' +
+                        '<div><div class="k">Temperatura</div><div class="v">' + esc(temp) + '</div></div>' +
+                        '<div><div class="k">Carico (1/5/15)</div><div class="v">' + esc(load) + '</div></div>' +
+                        '<div><div class="k">Memoria</div><div class="v">' + esc(mem) + '</div></div>' +
+                        '<div><div class="k">Disco (/)</div><div class="v">' + esc(disk) + '</div></div>';
+                })
+                .catch(function () {
+                    panel.innerHTML = '<span class="gateway-error">Errore caricando le risorse.</span>';
+                });
+        } else {
+            panel.style.display = 'none';
+            panel.innerHTML = '';
+        }
+    });
+
+    loadStatus();
+    setInterval(loadStatus, 30000);
+})();
+</script>
 {% endif %}
 {% endblock %}
