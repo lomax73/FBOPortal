@@ -177,7 +177,7 @@
 <section class="gateway-widget" id="gateway-widget">
     <div class="gateway-header">
         <div class="gateway-title">
-            <button type="button" class="gateway-toggle" id="gateway-toggle" aria-expanded="true" title="Riduci">▾</button>
+            <button type="button" class="gateway-toggle" id="gateway-toggle" aria-expanded="false" title="Espandi">▸</button>
             <h2 class="section-title">Server &amp; VPS</h2>
             <span class="gateway-summary" id="gateway-summary"></span>
         </div>
@@ -186,7 +186,7 @@
             <a class="gateway-link" href="{{ gateway_app.url }}" target="_blank" rel="noopener">Apri FBOAIGate &rarr;</a>
         </div>
     </div>
-    <div id="gateway-status">
+    <div id="gateway-status" style="display:none;">
         <p class="gateway-note">Caricamento stato host…</p>
     </div>
 </section>
@@ -431,7 +431,9 @@
     }
 
     try {
-        if (localStorage.getItem(collapseKey) === '1') setCollapsed(true);
+        // Collassato di default: si espande solo se l'utente lo ha
+        // esplicitamente riaperto in una visita precedente.
+        setCollapsed(localStorage.getItem(collapseKey) !== '0');
     } catch (e) {}
 
     loadStatus();
