@@ -14,7 +14,7 @@ def seed_preventify(apps, schema_editor):
             'name': 'Preventify',
             'description': "Preventivi Nanopower e moduli d'ordine",
             'url': 'https://preventify.fbosolution.it/',
-            'icon': '',
+            'icon': 'preventify.svg',
             'order': 8,
             'dev_status': in_produzione,
         },
