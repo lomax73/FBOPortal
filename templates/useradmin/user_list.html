@@ -26,35 +26,79 @@
 </ul>
 {% endif %}
 
-{% if rows %}
-<table>
-    <thead>
-        <tr><th>Username</th><th>App</th><th>Email</th><th>Attivo</th><th>Ultimo accesso</th><th></th></tr>
-    </thead>
-    <tbody>
-        {% for row in rows %}
-        <tr>
-            <td>{{ row.user.username }}</td>
-            <td>{{ row.app.name }}</td>
-            <td>{{ row.user.email|default:"—" }}</td>
-            <td>
-                {% if row.user.is_active %}
-                    <span class="badge" style="background:#22c55e;">Sì</span>
-                {% else %}
-                    <span class="badge" style="background:#9ca3af;">No</span>
-                {% endif %}
-            </td>
-            <td>{{ row.user.last_login|default:"mai" }}</td>
-            <td style="white-space:nowrap;">
-                <a href="{% url 'user-update' row.app.pk row.user.id %}?username={{ row.user.username }}&email={{ row.user.email }}&is_active={{ row.user.is_active|yesno:'1,0' }}">Modifica</a>
-                ·
-                <a href="{% url 'user-delete' row.app.pk row.user.id %}?username={{ row.user.username }}">Elimina</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% elif has_managed_apps and not errors %}
-<p style="color:#64748b;">Nessun utente ancora in nessuna app.</p>
-{% endif %}
+{% for group in groups %}
+<div class="useradmin-group" style="border:1px solid #e2e8f0; border-radius:8px; margin-bottom:1rem; overflow:hidden;">
+    <div class="useradmin-group-header" style="display:flex; align-items:center; gap:.5rem; padding:.75rem 1rem; background:#f8fafc; cursor:pointer;" data-toggle-target="useradmin-group-{{ forloop.counter }}">
+        <button type="button" class="useradmin-toggle" id="useradmin-toggle-{{ forloop.counter }}" aria-expanded="true" title="Riduci" style="background:none; border:none; font-size:1rem; cursor:pointer; line-height:1;">▾</button>
+        <span class="useradmin-group-title" style="font-weight:600;">{{ group.app.name }}</span>
+        <span class="badge" style="background:#64748b;">{{ group.count }} utent{{ group.count|pluralize:"e,i" }}</span>
+    </div>
+    <div id="useradmin-group-{{ forloop.counter }}" class="useradmin-group-body">
+        {% if group.users %}
+        <table style="margin:0;">
+            <thead>
+                <tr><th>Username</th><th>Email</th><th>Attivo</th><th>Ultimo accesso</th><th></th></tr>
+            </thead>
+            <tbody>
+                {% for user in group.users %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.email|default:"—" }}</td>
+                    <td>
+                        {% if user.is_active %}
+                            <span class="badge" style="background:#22c55e;">Sì</span>
+                        {% else %}
+                            <span class="badge" style="background:#9ca3af;">No</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ user.last_login|default:"mai" }}</td>
+                    <td style="white-space:nowrap;">
+                        <a href="{% url 'user-update' group.app.pk user.id %}?username={{ user.username }}&email={{ user.email }}&is_active={{ user.is_active|yesno:'1,0' }}">Modifica</a>
+                        ·
+                        <a href="{% url 'user-delete' group.app.pk user.id %}?username={{ user.username }}">Elimina</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p style="color:#64748b; padding:.75rem 1rem; margin:0;">Nessun utente in questa app.</p>
+        {% endif %}
+    </div>
+</div>
+{% empty %}
+    {% if has_managed_apps and not errors %}
+    <p style="color:#64748b;">Nessun utente ancora in nessuna app.</p>
+    {% endif %}
+{% endfor %}
+
+<script>
+(function () {
+    var groups = document.querySelectorAll('.useradmin-group');
+    groups.forEach(function (group) {
+        var header = group.querySelector('.useradmin-group-header');
+        var toggleBtn = group.querySelector('.useradmin-toggle');
+        var body = group.querySelector('.useradmin-group-body');
+        if (!header || !toggleBtn || !body) return;
+
+        var storageKey = 'fbo.useradmin.collapsed.' + body.id;
+
+        function setCollapsed(collapsed) {
+            body.style.display = collapsed ? 'none' : '';
+            toggleBtn.textContent = collapsed ? '▸' : '▾';
+            toggleBtn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+            toggleBtn.title = collapsed ? 'Espandi' : 'Riduci';
+            try { localStorage.setItem(storageKey, collapsed ? '1' : '0'); } catch (e) {}
+        }
+
+        header.addEventListener('click', function (evt) {
+            setCollapsed(body.style.display !== 'none');
+        });
+
+        var stored = null;
+        try { stored = localStorage.getItem(storageKey); } catch (e) {}
+        setCollapsed(stored === '1');
+    });
+})();
+</script>
 {% endblock %}

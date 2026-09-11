@@ -11,21 +11,21 @@ from .forms import UserCreateForm, UserUpdateForm
 
 @login_required
 def user_list(request):
-    rows = []
+    groups = []
     errors = []
     apps = [a for a in AppLink.objects.all() if a.user_management_enabled]
+    apps.sort(key=lambda a: a.name)
     for app_link in apps:
         try:
             users = services.list_users(app_link)
         except services.RemoteAppError as exc:
             errors.append({'app': app_link, 'error': str(exc)})
             continue
-        for user in users:
-            rows.append({'app': app_link, 'user': user})
+        users.sort(key=lambda u: u['username'])
+        groups.append({'app': app_link, 'users': users, 'count': len(users)})
 
-    rows.sort(key=lambda r: (r['app'].name, r['user']['username']))
     return render(request, 'useradmin/user_list.html', {
-        'rows': rows,
+        'groups': groups,
         'errors': errors,
         'has_managed_apps': bool(apps),
     })
