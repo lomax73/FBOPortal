@@ -29,11 +29,11 @@
 {% for group in groups %}
 <div class="useradmin-group" style="border:1px solid #e2e8f0; border-radius:8px; margin-bottom:1rem; overflow:hidden;">
     <div class="useradmin-group-header" style="display:flex; align-items:center; gap:.5rem; padding:.75rem 1rem; background:#f8fafc; cursor:pointer;" data-toggle-target="useradmin-group-{{ forloop.counter }}">
-        <button type="button" class="useradmin-toggle" id="useradmin-toggle-{{ forloop.counter }}" aria-expanded="true" title="Riduci" style="background:none; border:none; font-size:1rem; cursor:pointer; line-height:1;">▾</button>
+        <button type="button" class="useradmin-toggle" id="useradmin-toggle-{{ forloop.counter }}" aria-expanded="false" title="Espandi" style="background:none; border:none; font-size:1rem; cursor:pointer; line-height:1;">▸</button>
         <span class="useradmin-group-title" style="font-weight:600;">{{ group.app.name }}</span>
         <span class="badge" style="background:#64748b;">{{ group.count }} utent{{ group.count|pluralize:"e,i" }}</span>
     </div>
-    <div id="useradmin-group-{{ forloop.counter }}" class="useradmin-group-body">
+    <div id="useradmin-group-{{ forloop.counter }}" class="useradmin-group-body" style="display:none;">
         {% if group.users %}
         <table style="margin:0;">
             <thead>
@@ -97,7 +97,7 @@
 
         var stored = null;
         try { stored = localStorage.getItem(storageKey); } catch (e) {}
-        setCollapsed(stored === '1');
+        setCollapsed(stored !== '0');
     });
 })();
 </script>
