@@ -29,3 +29,17 @@ Saltata in questa sessione su richiesta dell'utente — da fare alla prossima se
 
 ### Per chi riprende questo progetto
 La verifica rapida del codice per `catalog`/FBOPortal non è ancora stata fatta in questa sessione: alla prossima ripresa vale la pena farla prima di passare a nuove note. Nessun'altra nota FBOFlag aperta o approvata per `portal` al momento di chiudere questa sessione.
+
+## 2026-08-18 — sessione redflag
+
+### Segnalazioni FBOFlag
+- [In test, in attesa di conferma] (id 86) "DEBUG=True di default, impatto esteso: DEBUG=True esporrebbe MASTER_ENCRYPTION_KEY, con cui si decifrano i token di ogni app satellite" — verificato che in produzione `DJANGO_DEBUG=false` è già impostato correttamente (non era un rischio attivo). Aggiunto promemoria esplicito in `deploy/README.md`. Commit+push (`1f55b78`), nessun deploy applicativo necessario (solo doc).
+- [In test, in attesa di conferma] (id 87) "`useradmin/services.py`, `verify=False` verso ogni app satellite (direzione opposta: qui il Portale chiama le satelliti)" — più complesso dei casi analoghi già risolti in RackReport/Preventivi/FiberReport perché coinvolge 7 app diverse, ognuna col proprio certificato. Aggiunto `AppLink.internal_ca_cert` (pinning configurabile per app dall'admin) e `_PinnedCertAdapter` in `useradmin/services.py`. 5 app hanno certificati self-signed leggibili da chiunque; 2 (mailer, fboaigate) hanno certificati Let's Encrypt reali ma vivono in `/etc/letsencrypt` (700 root:root, non leggibile dagli utenti applicativi) — per queste il certificato pubblico (mai la chiave privata) è ora copiato in `/etc/ssl/pinned-certs/` da un hook di rinnovo certbot dedicato (`/etc/letsencrypt/renewal-hooks/deploy/copy-pinned-certs.sh`, verificato eseguendolo a mano). Popolate tutte e 7 le righe `AppLink` in produzione, testato `list_users` per ognuna con verifica TLS reale, verificato anche in negativo (un certificato diverso viene rifiutato). Deployato (commit `ccb275f`).
+- [In test, in attesa di conferma] (id 88) "`cliente_import_confirm()`, token da POST usato senza validazione nel path — potenziale path traversal" — validato con `uuid.UUID(hex=token)` prima di costruire il path. Deployato (commit `97703e7`).
+- [Scartata] (id 108) "Nessun test automatico per catalog/useradmin/clienti" — l'utente ha scelto di scartarla quando proposta (implementazione ora / rimando a sessione dedicata / scarto).
+
+### Verifica rapida del codice
+Nessun bug nuovo trovato oltre alle note stesse, tutte confermate nel codice prima di procedere. La verifica rapida generale su `catalog`, rimasta in sospeso dalla sessione del 2026-08-14, resta ancora da fare in una sessione futura.
+
+### Per chi riprende questo progetto
+Tutte e 3 le note implementate restano `testing` su FBOFlag finché l'utente non conferma di persona: in particolare provare la gestione utenti da remoto (admin → una card → utenti) per una qualsiasi app satellite (id 87), e l'import clienti da Excel (id 88). Il pattern `verify=False` verso il Portale (lato satelliti, id 91/94/78 di altre sessioni) resta da correggere in mailer e netvault. `/etc/ssl/pinned-certs/` è una posizione condivisa: se in futuro si aggiungono altre app satellite con certificato Let's Encrypt reale (non self-signed), va aggiunta anche lì una riga nell'hook di rinnovo `copy-pinned-certs.sh`.
