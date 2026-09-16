@@ -63,6 +63,7 @@ def user_update(request, app_pk, user_id):
             fields = {
                 'email': form.cleaned_data['email'],
                 'is_active': form.cleaned_data['is_active'],
+                'is_superuser': form.cleaned_data['is_superuser'],
             }
             if form.cleaned_data['new_password']:
                 fields['password'] = form.cleaned_data['new_password']
@@ -77,6 +78,7 @@ def user_update(request, app_pk, user_id):
         initial = {
             'email': request.GET.get('email', ''),
             'is_active': request.GET.get('is_active') == '1',
+            'is_superuser': request.GET.get('is_superuser') == '1',
         }
         form = UserUpdateForm(initial=initial)
     return render(request, 'useradmin/user_form.html', {

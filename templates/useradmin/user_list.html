@@ -37,7 +37,7 @@
         {% if group.users %}
         <table style="margin:0;">
             <thead>
-                <tr><th>Username</th><th>Email</th><th>Attivo</th><th>Ultimo accesso</th><th></th></tr>
+                <tr><th>Username</th><th>Email</th><th>Attivo</th><th>Superuser</th><th>Ultimo accesso</th><th></th></tr>
             </thead>
             <tbody>
                 {% for user in group.users %}
@@ -51,9 +51,16 @@
                             <span class="badge" style="background:#9ca3af;">No</span>
                         {% endif %}
                     </td>
+                    <td>
+                        {% if user.is_superuser %}
+                            <span class="badge" style="background:#22c55e;">Sì</span>
+                        {% else %}
+                            <span class="badge" style="background:#9ca3af;">No</span>
+                        {% endif %}
+                    </td>
                     <td>{{ user.last_login|default:"mai" }}</td>
                     <td style="white-space:nowrap;">
-                        <a href="{% url 'user-update' group.app.pk user.id %}?username={{ user.username }}&email={{ user.email }}&is_active={{ user.is_active|yesno:'1,0' }}">Modifica</a>
+                        <a href="{% url 'user-update' group.app.pk user.id %}?username={{ user.username }}&email={{ user.email }}&is_active={{ user.is_active|yesno:'1,0' }}&is_superuser={{ user.is_superuser|yesno:'1,0' }}">Modifica</a>
                         ·
                         <a href="{% url 'user-delete' group.app.pk user.id %}?username={{ user.username }}">Elimina</a>
                     </td>

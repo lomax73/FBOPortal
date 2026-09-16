@@ -22,6 +22,10 @@ class UserCreateForm(forms.Form):
 class UserUpdateForm(forms.Form):
     email = forms.EmailField(label='Email', required=False)
     is_active = forms.BooleanField(label='Attivo', required=False)
+    is_superuser = forms.BooleanField(
+        label='Superuser', required=False,
+        help_text="Solo per le app che lo supportano: l'utente diventa amministratore.",
+    )
     new_password = forms.CharField(
         label='Nuova password', required=False, widget=forms.PasswordInput,
         help_text='Lascia vuoto per non cambiarla.',
